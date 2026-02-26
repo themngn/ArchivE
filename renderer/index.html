@@ -7,126 +7,29 @@
     </head>
     <body>
         <div id="app">
-            <main class="workspace">
-                <!-- ── Left: Settings panel ───────────────────── -->
-                <aside class="settings-panel">
-                    <div class="panel-section">
-                        <p class="panel-label">Archive</p>
-
-                        <div class="field">
-                            <label class="field-label" for="archiveName"
-                                >Name</label
-                            >
-                            <div class="input-group">
-                                <input
-                                    type="text"
-                                    id="archiveName"
-                                    class="input input--flex"
-                                    value="archive.zip"
-                                    autocomplete="off"
-                                    spellcheck="false"
-                                />
-                                <select id="extSelect" class="select">
-                                    <option value="zip">.zip</option>
-                                    <option value="tar">.tar</option>
-                                    <option value="tar.gz">.tar.gz</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="field">
-                            <label class="field-label" for="outputPath"
-                                >Destination</label
-                            >
-                            <div class="input-group">
-                                <input
-                                    type="text"
-                                    id="outputPath"
-                                    class="input input--flex input--mono"
-                                    autocomplete="off"
-                                    spellcheck="false"
-                                />
-                                <button
-                                    id="btnSelectOutput"
-                                    class="btn btn--secondary btn--icon"
-                                    title="Browse for save location"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="14"
-                                        height="14"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    >
-                                        <path
-                                            d="M3 3h6l2 3h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
-                                        />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel-divider"></div>
-
-                    <div class="panel-section panel-section--grow">
-                        <p class="panel-label">Files</p>
-                        <div class="action-buttons">
-                            <button
-                                id="btnAddFiles"
-                                class="btn btn--secondary btn--full"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="13"
-                                    height="13"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2.5"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <line x1="12" y1="5" x2="12" y2="19" />
-                                    <line x1="5" y1="12" x2="19" y2="12" />
-                                </svg>
-                                Add Files
-                            </button>
-                            <button
-                                id="btnRemoveFiles"
-                                class="btn btn--danger btn--full"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="13"
-                                    height="13"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                >
-                                    <polyline points="3 6 5 6 21 6" />
-                                    <path d="M19 6l-1 14H6L5 6" />
-                                    <path d="M10 11v6M14 11v6" />
-                                    <path d="M9 6V4h6v2" />
-                                </svg>
-                                Remove Selected
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="panel-divider"></div>
-
-                    <div class="panel-section">
+            <!-- ── Top: Config bar ──────────────────────────────── -->
+            <div class="config-bar">
+                <div class="config-field config-field--grow">
+                    <label class="field-label" for="outputPath"
+                        >Destination</label
+                    >
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="outputPath"
+                            class="input input--flex input--mono"
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <select id="extSelect" class="select">
+                            <option value="zip">.zip</option>
+                            <option value="tar">.tar</option>
+                            <option value="tar.gz">.tar.gz</option>
+                        </select>
                         <button
-                            id="btnArchive"
-                            class="btn btn--primary btn--full btn--archive"
+                            id="btnSelectOutput"
+                            class="btn btn--secondary btn--icon"
+                            title="Browse for save location"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -139,16 +42,20 @@
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                             >
-                                <polyline points="21 8 21 21 3 21 3 8" />
-                                <rect x="1" y="3" width="22" height="5" />
-                                <line x1="10" y1="12" x2="14" y2="12" />
+                                <path
+                                    d="M3 3h6l2 3h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+                                />
                             </svg>
-                            <span id="btnArchiveText">Create Archive</span>
                         </button>
                     </div>
-                </aside>
+                </div>
+            </div>
 
-                <!-- ── Right: File list panel ──────────────────── -->
+            <div class="panel-divider"></div>
+
+            <!-- ── Bottom: File area ───────────────────────────── -->
+            <main class="workspace">
+                <!-- File list panel -->
                 <section class="file-panel">
                     <div class="file-panel-header">
                         <span class="file-panel-title">Selected Files</span>
@@ -182,6 +89,73 @@
                         </ul>
                     </div>
                 </section>
+
+                <!-- Action buttons sidebar -->
+                <aside class="actions-sidebar">
+                    <button
+                        id="btnAddFiles"
+                        class="btn btn--secondary btn--full"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="13"
+                            height="13"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Files
+                    </button>
+                    <button
+                        id="btnRemoveFiles"
+                        class="btn btn--danger btn--full"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="13"
+                            height="13"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <polyline points="3 6 5 6 21 6" />
+                            <path d="M19 6l-1 14H6L5 6" />
+                            <path d="M10 11v6M14 11v6" />
+                            <path d="M9 6V4h6v2" />
+                        </svg>
+                        Remove Selected
+                    </button>
+                    <button
+                        id="btnArchive"
+                        class="btn btn--primary btn--full btn--archive"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <polyline points="21 8 21 21 3 21 3 8" />
+                            <rect x="1" y="3" width="22" height="5" />
+                            <line x1="10" y1="12" x2="14" y2="12" />
+                        </svg>
+                        <span id="btnArchiveText">Create Archive</span>
+                    </button>
+                </aside>
             </main>
 
             <!-- ── Status bar ──────────────────────────────────── -->

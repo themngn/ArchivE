@@ -1,5 +1,5 @@
 // ── DOM refs ────────────────────────────────────────────────
-const archiveNameInput = document.getElementById('archiveName');
+
 const extSelect        = document.getElementById('extSelect');
 const outputPathInput  = document.getElementById('outputPath');
 const btnSelectOutput  = document.getElementById('btnSelectOutput');
@@ -14,7 +14,6 @@ const statusMessageEl  = document.getElementById('statusMessage');
 
 // ── State ───────────────────────────────────────────────────
 let files = [];          // array of absolute paths
-let outputDir = '';      // directory portion of the output path
 
 // ── Status bar ─────────────────────────────────────────────
 let _statusTimer;
@@ -62,14 +61,6 @@ function extFromDropdown() {
   return '.' + v;
 }
 
-/** Rebuild outputPath from outputDir + archiveName. */
-function rebuildOutputPath() {
-  if (outputDir) {
-    const sep = outputDir.endsWith('\\') || outputDir.endsWith('/') ? '' : '\\';
-    outputPathInput.value = outputDir + sep + archiveNameInput.value;
-  }
-}
-
 /** Parse a full path into { dir, base }. */
 function splitPath(fullPath) {
   const sepIdx = Math.max(fullPath.lastIndexOf('\\'), fullPath.lastIndexOf('/'));
@@ -77,43 +68,30 @@ function splitPath(fullPath) {
   return { dir: fullPath.slice(0, sepIdx), base: fullPath.slice(sepIdx + 1) };
 }
 
-// Set a sensible initial output directory (user Desktop)
+// Set a sensible initial output path (Desktop/archive.zip)
 (async function initDefaults() {
   try {
     const desktopPath = await window.electronAPI.getDesktopPath();
-    outputDir = desktopPath;
-    rebuildOutputPath();
+    outputPathInput.value = desktopPath + '\\archive.zip';
   } catch (err) {
     console.error('Failed to get desktop path:', err);
-    outputDir = '';
     outputPathInput.value = '';
   }
 })();
 
-// ── Three-way sync logic ────────────────────────────────────
+// ── Two-way sync logic ──────────────────────────────────────
 
-// 1. Archive name input → update dropdown + output path
-archiveNameInput.addEventListener('input', () => {
-  const name = archiveNameInput.value;
-  const ext = parseArchiveExt(name);
-  if (ext && EXT_MAP[ext]) {
-    extSelect.value = EXT_MAP[ext];
-  }
-  rebuildOutputPath();
-});
-
-// 2. Extension dropdown → update archive name + output path
+// 1. Extension dropdown → swap extension in output path
 extSelect.addEventListener('change', () => {
-  const base = stripExt(archiveNameInput.value);
-  archiveNameInput.value = base + extFromDropdown();
-  rebuildOutputPath();
+  const { dir, base } = splitPath(outputPathInput.value);
+  const newBase = stripExt(base) || 'archive';
+  const sep = dir ? '\\' : '';
+  outputPathInput.value = (dir ? dir + sep : '') + newBase + extFromDropdown();
 });
 
-// 3. Output path input → update archive name + dropdown
+// 2. Output path input → update dropdown
 outputPathInput.addEventListener('input', () => {
-  const { dir, base } = splitPath(outputPathInput.value);
-  outputDir = dir;
-  archiveNameInput.value = base;
+  const { base } = splitPath(outputPathInput.value);
   const ext = parseArchiveExt(base);
   if (ext && EXT_MAP[ext]) {
     extSelect.value = EXT_MAP[ext];
@@ -122,16 +100,14 @@ outputPathInput.addEventListener('input', () => {
 
 // ── Select output button ────────────────────────────────────
 btnSelectOutput.addEventListener('click', async () => {
-  const defaultName = archiveNameInput.value || ('archive' + extFromDropdown());
+  const { base } = splitPath(outputPathInput.value);
+  const defaultName = (stripExt(base) || 'archive') + extFromDropdown();
   const result = await window.electronAPI.selectOutput(defaultName);
   if (!result) return;
 
   outputPathInput.value = result;
-  const { dir, base } = splitPath(result);
-  outputDir = dir;
-  archiveNameInput.value = base;
-
-  const ext = parseArchiveExt(base);
+  const { base: newBase } = splitPath(result);
+  const ext = parseArchiveExt(newBase);
   if (ext && EXT_MAP[ext]) {
     extSelect.value = EXT_MAP[ext];
   }
