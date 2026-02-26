@@ -8,10 +8,27 @@ const fileListWrapper  = document.querySelector('.file-list-wrapper');
 const btnAddFiles      = document.getElementById('btnAddFiles');
 const btnRemoveFiles   = document.getElementById('btnRemoveFiles');
 const btnArchive       = document.getElementById('btnArchive');
+const btnArchiveText   = document.getElementById('btnArchiveText');
+const fileCountEl      = document.getElementById('fileCount');
+const statusMessageEl  = document.getElementById('statusMessage');
 
 // ── State ───────────────────────────────────────────────────
 let files = [];          // array of absolute paths
 let outputDir = '';      // directory portion of the output path
+
+// ── Status bar ─────────────────────────────────────────────
+let _statusTimer;
+function showStatus(message, type = 'info') {
+  statusMessageEl.textContent = message;
+  statusMessageEl.className = message ? `status--${type}` : '';
+  clearTimeout(_statusTimer);
+  if (message) {
+    _statusTimer = setTimeout(() => {
+      statusMessageEl.textContent = '';
+      statusMessageEl.className = '';
+    }, 5000);
+  }
+}
 
 // Supported extensions mapped to their dropdown values
 const EXT_MAP = {
@@ -124,10 +141,23 @@ btnSelectOutput.addEventListener('click', async () => {
 
 function renderFileList() {
   fileList.innerHTML = '';
+  fileCountEl.textContent = files.length === 0
+    ? '0 files'
+    : `${files.length} file${files.length !== 1 ? 's' : ''}`;
   if (files.length === 0) {
     const li = document.createElement('li');
     li.className = 'placeholder';
-    li.textContent = 'Drag files here';
+    li.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"
+           style="margin-bottom: 8px; opacity: 0.35">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="12" y1="18" x2="12" y2="12"/>
+        <line x1="9" y1="15" x2="15" y2="15"/>
+      </svg>
+      <span>Drop files here or use Add Files</span>`;
     fileList.appendChild(li);
     return;
   }
@@ -192,30 +222,31 @@ fileListWrapper.addEventListener('drop', (e) => {
 // ── Archive button ──────────────────────────────────────────
 btnArchive.addEventListener('click', async () => {
   if (files.length === 0) {
-    alert('No files selected.');
+    showStatus('No files selected. Add files before archiving.', 'error');
     return;
   }
   const out = outputPathInput.value.trim();
   if (!out) {
-    alert('Please specify an output path.');
+    showStatus('Please specify an output destination path.', 'error');
     return;
   }
 
   const format = extSelect.value; // "zip" | "tar" | "tar.gz"
 
   btnArchive.disabled = true;
-  btnArchive.textContent = 'Archiving…';
+  btnArchiveText.textContent = 'Archiving…';
+  showStatus('Creating archive…', 'info');
   try {
     const result = await window.electronAPI.createArchive({
       files,
       outputPath: out,
       format,
     });
-    alert(`Archive created successfully!\nSize: ${(result.bytes / 1024).toFixed(1)} KB`);
+    showStatus(`Archive created successfully  ·  ${(result.bytes / 1024).toFixed(1)} KB`, 'success');
   } catch (err) {
-    alert('Error creating archive:\n' + (err.message || err));
+    showStatus('Error: ' + (err.message || err), 'error');
   } finally {
     btnArchive.disabled = false;
-    btnArchive.textContent = 'Archive';
+    btnArchiveText.textContent = 'Create Archive';
   }
 });

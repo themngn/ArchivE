@@ -8,9 +8,9 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 720,
-    height: 460,
-    title: 'Archivist',
+    width: 820,
+    height: 520,
+    title: 'ArchivE',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,

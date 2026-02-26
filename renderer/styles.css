@@ -1,108 +1,434 @@
-/* Minimal reset – real styling is a future consideration */
-* {
+/* ── Design tokens ─────────────────────────────────────────── */
+:root {
+  --bg-base:        #141414;
+  --bg-surface:     #1c1c1c;
+  --bg-panel:       #212121;
+  --bg-elevated:    #2a2a2a;
+  --bg-hover:       #303030;
+  --bg-active:      #383838;
+  --bg-selected:    rgba(0, 122, 204, 0.22);
+  --border:         rgba(255, 255, 255, 0.07);
+  --border-strong:  rgba(255, 255, 255, 0.13);
+  --border-focus:   #007acc;
+  --text-primary:   #d4d4d4;
+  --text-secondary: #858585;
+  --text-muted:     #4a4a4a;
+  --text-on-accent: #ffffff;
+  --accent:         #007acc;
+  --accent-hover:   #1e8fcf;
+  --accent-muted:   rgba(0, 122, 204, 0.15);
+  --danger:         #e05252;
+  --danger-hover:   #ef6f6f;
+  --danger-muted:   rgba(224, 82, 82, 0.1);
+  --success:        #4ec9a0;
+  --shadow-sm:      0 1px 3px rgba(0, 0, 0, 0.5);
+  --radius:         5px;
+  --radius-sm:      4px;
+  --transition:     140ms ease;
+}
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-body {
-  font-family: sans-serif;
-  padding: 10px;
+/* ── Base ──────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
 
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* ── App shell ─────────────────────────────────────────────── */
 #app {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 20px);
+  height: 100%;
 }
 
-/* ── Rows ───────────────────────────── */
-.row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
-  white-space: nowrap;
-}
-
-.row label {
-  flex: 0 0 120px;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.row input[type="text"] {
-  flex: 1;
-}
-
-/* ── File area ──────────────────────── */
-.file-area {
+/* ── Workspace (two-column) ────────────────────────────────── */
+.workspace {
   flex: 1;
   display: flex;
-  gap: 6px;
   min-height: 0;
 }
 
+/* ── Settings panel (left) ─────────────────────────────────── */
+.settings-panel {
+  width: 224px;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-section {
+  padding: 14px 16px;
+}
+
+.panel-section--grow {
+  flex: 1;
+}
+
+.panel-divider {
+  height: 1px;
+  background: var(--border);
+}
+
+.panel-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* ── Fields ────────────────────────────────────────────────── */
+.field {
+  margin-bottom: 10px;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+/* ── Input group ───────────────────────────────────────────── */
+.input-group {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+}
+
+/* ── Inputs ────────────────────────────────────────────────── */
+.input {
+  height: 28px;
+  padding: 0 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px var(--accent-muted);
+}
+
+.input--flex {
+  flex: 1;
+  min-width: 0;
+}
+
+.input--mono {
+  font-family: 'Cascadia Code', 'SF Mono', 'Consolas', monospace;
+  font-size: 11px;
+}
+
+/* Custom input text color placeholder */
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Select ────────────────────────────────────────────────── */
+.select {
+  height: 28px;
+  padding: 0 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 12px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px var(--accent-muted);
+}
+
+/* ── Buttons ───────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: background var(--transition), border-color var(--transition),
+              color var(--transition), opacity var(--transition), box-shadow var(--transition);
+  white-space: nowrap;
+}
+
+.btn:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent-muted);
+}
+
+.btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+/* Primary */
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.btn--primary:active:not(:disabled) {
+  opacity: 0.82;
+}
+
+/* Secondary */
+.btn--secondary {
+  background: var(--bg-elevated);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.btn--secondary:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.btn--secondary:active:not(:disabled) {
+  background: var(--bg-active);
+}
+
+/* Danger */
+.btn--danger {
+  background: var(--danger-muted);
+  border-color: rgba(224, 82, 82, 0.2);
+  color: var(--danger);
+}
+
+.btn--danger:hover:not(:disabled) {
+  background: rgba(224, 82, 82, 0.18);
+  border-color: var(--danger);
+  color: var(--danger-hover);
+}
+
+.btn--danger:active:not(:disabled) {
+  opacity: 0.82;
+}
+
+/* Modifiers */
+.btn--icon {
+  padding: 0 7px;
+  flex-shrink: 0;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn--archive {
+  height: 32px;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+}
+
+/* ── Action buttons ────────────────────────────────────────── */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── File panel (right) ────────────────────────────────────── */
+.file-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  min-width: 0;
+}
+
+.file-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 38px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.file-panel-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.file-badge {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 1px 8px;
+  transition: color var(--transition);
+}
+
+/* ── File list ─────────────────────────────────────────────── */
 .file-list-wrapper {
   flex: 1;
-  border: 1px solid #aaa;
   overflow-y: auto;
+  min-height: 0;
+}
+
+.file-list-wrapper::-webkit-scrollbar {
+  width: 5px;
+}
+
+.file-list-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.file-list-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+}
+
+.file-list-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 #fileList {
   list-style: none;
-  padding: 4px;
+  min-height: 100%;
 }
 
 #fileList li {
-  padding: 2px 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 28px;
+  font-size: 11.5px;
+  font-family: 'Cascadia Code', 'SF Mono', 'Consolas', monospace;
+  color: var(--text-primary);
   cursor: default;
   user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background var(--transition);
+}
+
+#fileList li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  margin-right: 10px;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+#fileList li:hover:not(.placeholder) {
+  background: var(--bg-hover);
 }
 
 #fileList li.selected {
-  background: #0078d4;
-  color: #fff;
+  background: var(--bg-selected);
+  color: #90caff;
 }
 
+#fileList li.selected::before {
+  background: var(--accent);
+}
+
+/* ── Placeholder ───────────────────────────────────────────── */
 #fileList li.placeholder {
-  text-align: center;
-  color: #888;
-  padding: 0;
-  font-size: 1.1em;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 180px;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--text-muted);
+  background: transparent;
+  letter-spacing: 0;
+}
+
+#fileList li.placeholder::before {
+  display: none;
+}
+
+/* ── Drag-over state ───────────────────────────────────────── */
+.file-list-wrapper.drag-over {
+  background: rgba(0, 122, 204, 0.06);
+  outline: 2px dashed rgba(0, 122, 204, 0.35);
+  outline-offset: -4px;
+}
+
+.file-list-wrapper.drag-over #fileList li.placeholder {
+  color: var(--accent);
+}
+
+/* ── Status bar ────────────────────────────────────────────── */
+.status-bar {
+  height: 22px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100%;
+  padding: 0 12px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-.file-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+#statusMessage {
+  font-size: 11px;
+  color: var(--text-muted);
+  transition: color var(--transition);
 }
 
-.file-buttons button {
-  width: 110px;
-}
-
-.file-buttons-column {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  justify-content: space-between;
-}
-
-.file-buttons-column button {
-  width: 110px;
-}
-
-/* Add top margin to Archive button to push it down */
-#btnArchive {
-  margin-top: auto;
-}
-
-/* Drag-over visual feedback */
-.file-list-wrapper.drag-over {
-  background: #e8f0fe;
-}
+#statusMessage.status--success { color: var(--success); }
+#statusMessage.status--error   { color: var(--danger); }
+#statusMessage.status--info    { color: var(--accent); }
