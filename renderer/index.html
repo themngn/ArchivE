@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Archivist</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div id="app">
+            <!-- Row 1: Archive name + extension dropdown -->
+            <div class="row">
+                <label for="archiveName">Archive name:</label>
+                <input type="text" id="archiveName" value="archive.zip" />
+                <select id="extSelect">
+                    <option value="zip" selected>zip</option>
+                    <option value="tar">tar</option>
+                    <option value="tar.gz">tar.gz</option>
+                </select>
+            </div>
+
+            <!-- Row 2: Output path + select button -->
+            <div class="row">
+                <label for="outputPath">Output path:</label>
+                <input type="text" id="outputPath" />
+                <button id="btnSelectOutput">Select output</button>
+            </div>
+
+            <!-- Row 3: File list area -->
+            <div class="row">
+                <label>Selected files:</label>
+            </div>
+
+            <div class="file-area">
+                <div class="file-list-wrapper">
+                    <ul id="fileList">
+                        <li class="placeholder">Drag files here</li>
+                    </ul>
+                </div>
+
+                <div class="file-buttons-column">
+                    <button id="btnAddFiles">Add files</button>
+                    <button id="btnRemoveFiles">Remove files</button>
+                    <button id="btnArchive">Archive</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="renderer.js"></script>
+    </body>
+</html>
