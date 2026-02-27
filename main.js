@@ -10,6 +10,9 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 820,
     height: 520,
+    minWidth: 500,
+    minHeight: 300,
+    icon: path.join(__dirname, 'assets', 'icon.ico'),
     title: 'ArchivE',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

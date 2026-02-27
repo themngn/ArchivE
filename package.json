@@ -1,15 +1,35 @@
 {
   "name": "archive",
+  "author": "Maksym Dukhota",
   "version": "1.0.0",
   "description": "Archivist – a simple file archiver (zip, tar, tar.gz)",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder --win"
   },
   "dependencies": {
-    "archiver": "^7.0.1"
+    "archiver": "^7.0.1",
+    "archiver-utils": "^5.0.2"
   },
   "devDependencies": {
-    "electron": "^33.0.0"
+    "cross-env": "^10.1.0",
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.archive.app",
+    "productName": "ArchivE",
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**",
+      "assets/**",
+      "node_modules/**"
+    ]
   }
 }

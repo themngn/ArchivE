@@ -98,6 +98,18 @@ outputPathInput.addEventListener('input', () => {
   }
 });
 
+// 3. Output path input → validate on blur; append selected ext if missing
+outputPathInput.addEventListener('blur', () => {
+  const val = outputPathInput.value.trim();
+  if (!val) return;
+  const { dir, base } = splitPath(val);
+  const ext = parseArchiveExt(base);
+  if (!ext) {
+    const sep = dir ? '\\' : '';
+    outputPathInput.value = (dir ? dir + sep : '') + base + extFromDropdown();
+  }
+});
+
 // ── Select output button ────────────────────────────────────
 btnSelectOutput.addEventListener('click', async () => {
   const { base } = splitPath(outputPathInput.value);
