@@ -181,31 +181,31 @@ btnRemoveFiles.addEventListener('click', () => {
   renderFileList();
 });
 
-// ── Drag & drop ─────────────────────────────────────────────
+// // ── Drag & drop ─────────────────────────────────────────────
 
-fileListWrapper.addEventListener('dragover', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  fileListWrapper.classList.add('drag-over');
-});
+// fileListWrapper.addEventListener('dragover', (e) => {
+//   e.preventDefault();
+//   e.stopPropagation();
+//   fileListWrapper.classList.add('drag-over');
+// });
 
-fileListWrapper.addEventListener('dragleave', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  fileListWrapper.classList.remove('drag-over');
-});
+// fileListWrapper.addEventListener('dragleave', (e) => {
+//   e.preventDefault();
+//   e.stopPropagation();
+//   fileListWrapper.classList.remove('drag-over');
+// });
 
-fileListWrapper.addEventListener('drop', (e) => {
-  e.preventDefault();
-  e.stopPropagation();
-  fileListWrapper.classList.remove('drag-over');
+// fileListWrapper.addEventListener('drop', (e) => {
+//   e.preventDefault();
+//   e.stopPropagation();
+//   fileListWrapper.classList.remove('drag-over');
 
-  const droppedFiles = [...e.dataTransfer.files].map((f) => f.path);
-  for (const f of droppedFiles) {
-    if (!files.includes(f)) files.push(f);
-  }
-  renderFileList();
-});
+//   const droppedFiles = [...e.dataTransfer.files].map((f) => f.path);
+//   for (const f of droppedFiles) {
+//     if (!files.includes(f)) files.push(f);
+//   }
+//   renderFileList();
+// });
 
 // ── Archive button ──────────────────────────────────────────
 btnArchive.addEventListener('click', async () => {
